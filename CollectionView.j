@@ -35,12 +35,18 @@
 
 - (BOOL)performDragOperation:(id)sender
 {
-    if (![[self delegate] respondsToSelector:@selector(collectionView:canMoveItemsAtIndexes:toIndex:)] ||
-        ![[self delegate] collectionView:self canMoveItemsAtIndexes:[self selectionIndexes] toIndex:dragIndex])
+    var delegate = [self delegate],
+        indexes = [self selectionIndexes];
+    
+    if (![delegate respondsToSelector:@selector(collectionView:canMoveItemsAtIndexes:toIndex:)] ||
+        ![delegate collectionView:self canMoveItemsAtIndexes:indexes toIndex:dragIndex])
         return NO;
     
-    [[self content] moveIndexes:[self selectionIndexes] toIndex:dragIndex];
+    [[self content] moveIndexes:indexes toIndex:dragIndex];
     [self setSelectionIndexes:[CPIndexSet indexSetWithIndex:dragIndex]];
+    
+    if ([delegate respondsToSelector:@selector(collectionView:didMoveItemsAtIndexes:toIndex:)])
+        [delegate collectionView:self didMoveItemsAtIndexes:indexes toIndex:dragIndex];
     
     return YES;
 }
