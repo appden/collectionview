@@ -132,8 +132,10 @@
 
 - (void)setView:(CPView)aView
 {
-    var cell = [[CollectionViewCell alloc] initWithFrame:[aView frame]];
+    [aView setFrameOrigin:CGPointMakeZero()];
     [aView setAutoresizingMask:CPViewHeightSizable | CPViewWidthSizable];
+    
+    var cell = [[CollectionViewCell alloc] initWithFrame:[aView frame]];
     [cell addSubview:aView];
     
     [super setView:cell];
